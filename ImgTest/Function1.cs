@@ -6,9 +6,6 @@ using System.Text.RegularExpressions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using ImageResizer;
-//using System.Configuration;
-//using ImageResizer.ExtensionMethods;
-
 
 
 
@@ -21,8 +18,7 @@ namespace ImgTest
             [BlobTrigger("samples-workitems/source/{name}", Connection = "")]Stream myBlob, 
             string name,
             [Blob("samples-workitems/destination/{name}", FileAccess.Write)]Stream outputBlob,
-            TraceWriter log,
-            CancellationToken token)
+            TraceWriter log)
         {
             const int maxWidth = 500;  // in pixels
             const int maxHeight = 500;
@@ -45,7 +41,8 @@ namespace ImgTest
                     Scale = ScaleMode.DownscaleOnly, // only reduce file dimension, do not enlarge them. Keep aspect ratio
                     JpegQuality = jpgQuality       // reduce quality of jpgs to same file space.
                 };
-                log.Info($"Process {name} - resizing if too large.");
+
+                log.Info($"Process {name} - resizing if file is too large.");
                 try
                 {
                     ImageBuilder.Current.Build(new ImageJob(myBlob, outputBlob, instructions));
@@ -58,10 +55,9 @@ namespace ImgTest
             else
             {
                 // If the file is not a supported image type, then copy files directly to the destination without any changes.
-                log.Info($"Copy {name} directly to storage");
+                log.Info($"Copy {name} directly to storage.  Not processed");
                 try
                 {
-                    //await myBlob.CopyToAsync(outputBlob, 4096, token);
                     await myBlob.CopyToAsync(outputBlob);
                 }
                 catch (Exception e)
