@@ -14,10 +14,12 @@ namespace ImgTest
     public static class Function1
     {
         [FunctionName("Function1")]
+        //[StorageAccount("AzureStorageConnection")]  // Azure storage. Assigned in 'local.settings.json' file
+        [StorageAccount("AzureWebJobsStorage")]     // local emulated storage
         public static async Task RunAsync(
-            [BlobTrigger("samples-workitems/source/{name}", Connection = "")]Stream myBlob, 
+            [BlobTrigger("source/{name}")]Stream myBlob,
             string name,
-            [Blob("samples-workitems/destination/{name}", FileAccess.Write)]Stream outputBlob,
+            [Blob("destination/{name}", FileAccess.Write)]Stream outputBlob,
             TraceWriter log)
         {
             const int maxWidth = 500;  // in pixels
