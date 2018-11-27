@@ -9,16 +9,20 @@ All files uploaded to a Azure storage blob container 'source' directory (and its
 
 The code is fairly well commented and short, so you can see the code for details.
 
+Publish the function to Azure directly from Visual Studio.  Right click on the project folder (ImgTest) and select 'Publish...'.  Follow the prompts.
+
 **Important notes**
 -	The Azure Storage Account needs to be of StorageV2 type.
-- A 'local.settings.json' file is needed with the following info (it is not saved due to being listed in the .gitignore file):
+- When the function is published from Visual Studio to Azure, the 'function.json' file is automatically generated.
+- A 'local.settings.json' file is needed for local development with the following info (it is not saved in the repo due to being listed in the .gitignore file):
 ```
   {
   "IsEncrypted": false,
   "Values": {
-    "AzureStorageConnection": "DefaultEndpointsProtocol=https;AccountName=<Blog-Container-Name>;AccountKey=<key-info>;EndpointSuffix=core.windows.net",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=<Blog-Container-Name>;AccountKey=<key-info>;EndpointSuffix=core.windows.net", // connection string for Azure blog storage
+    //"AzureWebJobsStorage": "UseDevelopmentStorage=true",  // local emulated storage
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
   }
+}
 ```
-- The connection string info for "AzureStorageConnection" will need to be copied from the Azure Portal "Access keys" menu.
+- The connection string info for "AzureWebJobsStorage" will need to be copied from the Azure Portal "Access keys" menu.
